@@ -14,16 +14,20 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            cards
-            cardCountAdjusters
+            ScrollView {
+                cards
+            }
+                Spacer()
+                cardCountAdjusters
         }
         .padding()
     }
     
     var cards: some View {
-        HStack {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
             ForEach(0..<cardCount, id: \.self) { index in
                 CardView(content: emojis[index])
+                    .aspectRatio(2/3, contentMode: .fit)
             }
         }
         .foregroundColor(Color.purple)
@@ -39,24 +43,21 @@ struct ContentView: View {
         .font(.largeTitle)
     }
     
-    var cardRemover: some View {
+    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
         Button(action: {
-            if cardCount > 1 {
-                cardCount -= 1
-            }
+            cardCount += offset
         }, label: {
-            Image(systemName: "rectangle.stack.badge.minus")
+            Image(systemName: symbol)
         })
+        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+    }
+    
+    var cardRemover: some View {
+        cardCountAdjuster(by: -1, symbol: "rectangle.stack.badge.minus")
     }
     
     var cardAdder: some View {
-        Button(action: {
-            if cardCount < emojis.count {
-                cardCount += 1
-            }
-        }, label: {
-            Image(systemName: "rectangle.stack.badge.plus")
-        })
+        cardCountAdjuster(by: +1, symbol: "rectangle.stack.badge.plus")
     }
 }
 
