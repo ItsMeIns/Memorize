@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CardView: View {
+    
     let content: String
     @State private var isFaceUp = false
     
