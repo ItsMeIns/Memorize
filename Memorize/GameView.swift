@@ -40,11 +40,9 @@ struct GameView: View {
     
     //MARK: - theme -
     var themeButton: some View {
-        HStack {
+        HStack(spacing: 50) {
             vehicle
-            Spacer()
             animal
-            Spacer()
             fruits
         }
         .imageScale(.medium)
